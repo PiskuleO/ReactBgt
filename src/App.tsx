@@ -1,26 +1,39 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import { Home } from "./components/Home";
+import { NoPage } from "./components/NoPage";
+import { Credits } from "./components/Credits";
+import { Games } from "./components/Games";
+import { Layout } from "./components/Layout";
+import ReactDOM from "react-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { FarmersWorld } from "./components/FarmersWorld";
+import { ArenaOfGlory } from "./components/ArenaOfGlory";
+import "./App.css";
 
 function App() {
+  const [waxprice, setWaxprice] = useState<number>(0);
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <BrowserRouter>
+      <Routes>
+        <Route
+          path="/"
+          element={<Layout waxprice={waxprice} setWaxprice={setWaxprice} />}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          <Route index element={<Home />} />
+          <Route path="games" element={<Games />} />
+          <Route path="credits" element={<Credits />} />
+          <Route path="farmersworld" element={<FarmersWorld />} />
+          <Route
+            path="arenaofglory"
+            element={
+              <ArenaOfGlory waxprice={waxprice} setWaxprice={setWaxprice} />
+            }
+          />
+          <Route path="*" element={<NoPage />} />
+        </Route>
+      </Routes>
+    </BrowserRouter>
   );
 }
-
+ReactDOM.render(<App />, document.getElementById("root"));
 export default App;

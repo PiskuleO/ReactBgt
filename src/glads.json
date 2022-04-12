@@ -1,0 +1,104 @@
+[
+  {
+    "rarity": "Common",
+    "lengthHours": 0.5,
+    "gladCount": 0,
+    "reward": 0.59
+  },
+  {
+    "rarity": "Common",
+    "lengthHours": 0.5,
+    "gladCount": 1,
+    "reward": 3.83
+  },
+  {
+    "rarity": "Uncommon",
+    "lengthHours": 1,
+    "gladCount": 1,
+    "reward": 33.3
+  },
+  {
+    "rarity": "Uncommon",
+    "lengthHours": 2,
+    "gladCount": 2,
+    "reward": 50.44
+  },
+  {
+    "rarity": "Uncommon",
+    "lengthHours": 3,
+    "gladCount": 3,
+    "reward": 67.92
+  },
+  {
+    "rarity": "Rare",
+    "lengthHours": 3,
+    "gladCount": 1,
+    "reward": 198.58
+  },
+  {
+    "rarity": "Rare",
+    "lengthHours": 4.5,
+    "gladCount": 2,
+    "reward": 303.71
+  },
+  {
+    "rarity": "Rare",
+    "lengthHours": 6,
+    "gladCount": 3,
+    "reward": 412.73
+  },
+  {
+    "rarity": "Epic",
+    "lengthHours": 6,
+    "gladCount": 1,
+    "reward": 1367.89
+  },
+  {
+    "rarity": "Epic",
+    "lengthHours": 7.5,
+    "gladCount": 2,
+    "reward": 2111.6
+  },
+  {
+    "rarity": "Epic",
+    "lengthHours": 9,
+    "gladCount": 3,
+    "reward": 2895.15
+  },
+  {
+    "rarity": "Legendary",
+    "lengthHours": 9,
+    "gladCount": 1,
+    "reward": 9464.61
+  },
+  {
+    "rarity": "Legendary",
+    "lengthHours": 10.5,
+    "gladCount": 2,
+    "reward": 14742.95
+  },
+  {
+    "rarity": "Legendary",
+    "lengthHours": 12,
+    "gladCount": 3,
+    "reward": 20385.31
+  },
+  {
+    "rarity": "Mythic",
+    "lengthHours": 12,
+    "gladCount": 1,
+    "reward": 72007.06
+  },
+  {
+    "rarity": "Mythic",
+    "lengthHours": 13.5,
+    "gladCount": 2,
+    "reward": 113153.95
+  },
+  {
+    "rarity": "Mythic",
+    "lengthHours": 15,
+    "gladCount": 3,
+    "reward": 157729.75
+  }
+]
