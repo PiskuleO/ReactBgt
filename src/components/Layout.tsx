@@ -1,22 +1,13 @@
-import React, { useState } from "react";
 import { Header } from "./Header";
 import { Footer } from "./Footer";
 import { Outlet } from "react-router-dom";
 import styled from "@emotion/styled";
 
-interface Props {
-  setWaxprice: (waxprice: number) => void;
-  waxprice: number;
-}
-
-export function Layout(props: Props) {
+export function Layout() {
   return (
     <div>
       <FooterSpacer>
-        <Header
-          waxprice={props.waxprice}
-          setWaxprice={props.setWaxprice}
-        ></Header>
+        <Header></Header>
         <Outlet />
       </FooterSpacer>
       <Footer></Footer>

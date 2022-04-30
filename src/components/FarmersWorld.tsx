@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import styled from "@emotion/styled";
 import tools from "../fwtools.json";
 
@@ -6,10 +6,13 @@ export function FarmersWorld() {
   const [fwwprice, setFwwprice] = useState(0);
   const [fwfprice, setFwfprice] = useState(0);
   const [fwgprice, setFwgprice] = useState(0);
-  const lowestroi = tools.reduce((lastlowest, tool) => {
-    const { roi } = computeroi(tool, fwgprice, fwwprice, fwfprice);
-    return roi < lastlowest ? roi : lastlowest;
-  }, Number.MAX_SAFE_INTEGER);
+
+  const lowestroi = useMemo(() => {
+    return tools.reduce((lastlowest, tool) => {
+      const { roi } = computeroi(tool, fwgprice, fwwprice, fwfprice);
+      return roi < lastlowest ? roi : lastlowest;
+    }, Number.MAX_SAFE_INTEGER);
+  }, [fwgprice, fwwprice, fwfprice]);
 
   useEffect(() => {
     (async () => {
@@ -51,83 +54,53 @@ export function FarmersWorld() {
         </Prices>
         <Cards>
           <Section>WOOD</Section>
-          {tools.map((asset) => {
-            if (asset.type === "wood") {
-              const { cycle, roi } = computeroi(
-                asset,
-                fwgprice,
-                fwwprice,
-                fwfprice
-              );
-              const daily = Math.round(cycle * 24 * 100) / 100;
+          {tools
+            .filter((asset) => {
+              return asset.type === "wood";
+            })
+            .map((asset) => {
               return (
-                <ItemCardPadding>
-                  <ItemCard>
-                    <ItemImg
-                      src={`https://ipfs.atomichub.io/ipfs/${encodeURIComponent(
-                        asset.img
-                      )}`}
-                      alt="asset"
-                    />
-                    <ItemInfo>ROI: {roi} Days</ItemInfo>
-                    <ItemInfo>DAILY: {daily} ￦</ItemInfo>
-                  </ItemCard>
-                </ItemCardPadding>
+                <GenerateAssets
+                  key={asset.name}
+                  asset={asset}
+                  fwfprice={fwfprice}
+                  fwgprice={fwgprice}
+                  fwwprice={fwwprice}
+                ></GenerateAssets>
               );
-            }
-          })}
+            })}
           <Section>FOOD</Section>
-          {tools.map((asset) => {
-            if (asset.type === "food") {
-              const { cycle, roi } = computeroi(
-                asset,
-                fwgprice,
-                fwwprice,
-                fwfprice
-              );
-              const daily = Math.round(cycle * 24 * 100) / 100;
+          {tools
+            .filter((asset) => {
+              return asset.type === "food";
+            })
+            .map((asset) => {
               return (
-                <ItemCardPadding>
-                  <ItemCard>
-                    <ItemImg
-                      src={`https://ipfs.atomichub.io/ipfs/${encodeURIComponent(
-                        asset.img
-                      )}`}
-                      alt="asset"
-                    />
-                    <ItemInfo>ROI: {roi} Days</ItemInfo>
-                    <ItemInfo>DAILY: {daily} ￦</ItemInfo>
-                  </ItemCard>
-                </ItemCardPadding>
+                <GenerateAssets
+                  key={asset.name}
+                  asset={asset}
+                  fwfprice={fwfprice}
+                  fwgprice={fwgprice}
+                  fwwprice={fwwprice}
+                ></GenerateAssets>
               );
-            }
-          })}
+            })}
           <Section>GOLD</Section>
-          {tools.map((asset) => {
-            if (asset.type === "gold") {
-              const { cycle, roi } = computeroi(
-                asset,
-                fwgprice,
-                fwwprice,
-                fwfprice
-              );
-              const daily = Math.round(cycle * 24 * 100) / 100;
+          {tools
+            .filter((asset) => {
+              return asset.type === "gold";
+            })
+            .map((asset) => {
               return (
-                <ItemCardPadding>
-                  <ItemCard>
-                    <ItemImg
-                      src={`https://ipfs.atomichub.io/ipfs/${encodeURIComponent(
-                        asset.img
-                      )}`}
-                      alt="asset"
-                    />
-                    <ItemInfo>ROI: {roi} Days</ItemInfo>
-                    <ItemInfo>DAILY: {daily} ￦</ItemInfo>
-                  </ItemCard>
-                </ItemCardPadding>
+                <GenerateAssets
+                  key={asset.name}
+                  asset={asset}
+                  fwfprice={fwfprice}
+                  fwgprice={fwgprice}
+                  fwwprice={fwwprice}
+                ></GenerateAssets>
               );
-            }
-          })}
+            })}
         </Cards>
       </MainCard>
     </Wrapper>
@@ -276,20 +249,22 @@ const ItemInfo = styled.p`
   font-size: calc(8px + 0.5vw);
   margin: 0;
 `;
+interface Asset {
+  name: string;
+  img: string;
+  rarity: string;
+  type: string;
+  chargetime: number;
+  energyconsume: number;
+  durabilityconsume: number;
+  reward: number;
+  goldcost: number;
+  woodcost: number;
+  pos: number;
+}
+
 function computeroi(
-  asset: {
-    name: string;
-    img: string;
-    rarity: string;
-    type: string;
-    chargetime: number;
-    energyconsume: number;
-    durabilityconsume: number;
-    reward: number;
-    goldcost: number;
-    woodcost: number;
-    pos: number;
-  },
+  asset: Asset,
   fwgprice: number,
   fwwprice: number,
   fwfprice: number
@@ -316,4 +291,33 @@ function computeroi(
     asset.chargetime;
   const roi = Math.round((itemprice / cycle / 24) * 1) / 1;
   return { cycle, roi };
+}
+
+function GenerateAssets({
+  asset,
+  fwgprice,
+  fwwprice,
+  fwfprice,
+}: {
+  asset: Asset;
+  fwgprice: number;
+  fwwprice: number;
+  fwfprice: number;
+}) {
+  const { cycle, roi } = computeroi(asset, fwgprice, fwwprice, fwfprice);
+  const daily = Math.round(cycle * 24 * 100) / 100;
+  return (
+    <ItemCardPadding>
+      <ItemCard>
+        <ItemImg
+          src={`https://ipfs.atomichub.io/ipfs/${encodeURIComponent(
+            asset.img
+          )}`}
+          alt="asset"
+        />
+        <ItemInfo>ROI: {roi} Days</ItemInfo>
+        <ItemInfo>DAILY: {daily} ￦</ItemInfo>
+      </ItemCard>
+    </ItemCardPadding>
+  );
 }

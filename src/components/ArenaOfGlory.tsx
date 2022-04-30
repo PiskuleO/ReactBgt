@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Background } from "./FarmersWorld";
 import { Wrapper } from "./FarmersWorld";
 import { MainTitle } from "./FarmersWorld";
@@ -8,34 +8,38 @@ import { Prices } from "./FarmersWorld";
 import { Tokens } from "./FarmersWorld";
 import styled from "@emotion/styled";
 import glads from "../glads.json";
+import { useWaxprice } from "./Header";
 
-interface Props {
-  setWaxprice: (waxprice: number) => void;
-  waxprice: number;
-}
-
-export function ArenaOfGlory(props: Props) {
+export function ArenaOfGlory() {
+  const waxprice = useWaxprice();
   const [gladrank, setGladrank] = useState("Common");
   const [aoggprice, setAoggprice] = useState(0);
-  const rarityNameToValue = new Map([
-    ["Common", 0],
-    ["Uncommon", 1],
-    ["Rare", 2],
-    ["Epic", 3],
-    ["Legendary", 4],
-    ["Mythic", 5],
-  ]);
-  function rarity(quest: {
-    rarity: string;
-    lengthHours: number;
-    gladCount: number;
-    reward: number;
-  }) {
-    return (
-      rarityNameToValue.get(gladrank)! + 1 >=
-      rarityNameToValue.get(quest.rarity)!
-    );
-  }
+  const rarityNameToValue = useMemo(() => {
+    return new Map([
+      ["Common", 0],
+      ["Uncommon", 1],
+      ["Rare", 2],
+      ["Epic", 3],
+      ["Legendary", 4],
+      ["Mythic", 5],
+    ]);
+  }, []);
+
+  const rarity = useCallback(
+    (quest: {
+      rarity: string;
+      lengthHours: number;
+      gladCount: number;
+      reward: number;
+    }) => {
+      return (
+        rarityNameToValue.get(gladrank)! + 1 >=
+        rarityNameToValue.get(quest.rarity)!
+      );
+    },
+    [rarityNameToValue, gladrank]
+  );
+
   useEffect(() => {
     (async () => {
       const aoggwax = await (
@@ -51,7 +55,7 @@ export function ArenaOfGlory(props: Props) {
         <GameImg src="/static/LogoLogo+(1).png" alt="Logo"></GameImg>
         <MainTitle>PROFIT TABLE</MainTitle>
         <GladCardPadding>
-          <GladCard src={`./static/${encodeURIComponent(gladrank)}.png`} />
+          <GladCard src={`/static/${encodeURIComponent(gladrank)}.png`} />
         </GladCardPadding>
         <GladSelectPadding>
           <GladSelect
@@ -69,7 +73,7 @@ export function ArenaOfGlory(props: Props) {
         <Prices>
           <Tokens>
             <TokenPrice>
-              AOGG: ￦{Math.round(aoggprice * 1000) / 1000}
+              AOGG: ￦{Math.round(aoggprice * 100000) / 100000}
             </TokenPrice>
           </Tokens>
         </Prices>
@@ -88,21 +92,18 @@ export function ArenaOfGlory(props: Props) {
               </thead>
               <tbody>
                 {glads.filter(rarity).map((quest) => {
+                  const profitinwax =
+                    Math.round(quest.reward * aoggprice * 100) / 100;
+                  const profitinusd =
+                    Math.round(quest.reward * aoggprice * waxprice * 100) / 100;
                   return (
-                    <tr>
+                    <tr key={quest.reward}>
                       <GladTableTd>{quest.rarity}</GladTableTd>
                       <GladTableTd>{quest.lengthHours}h</GladTableTd>
                       <GladTableTd>{quest.gladCount}</GladTableTd>
                       <GladTableTd>{quest.reward}</GladTableTd>
-                      <GladTableTd>
-                        ￦{Math.round(quest.reward * aoggprice * 100) / 100}
-                      </GladTableTd>
-                      <GladTableTd>
-                        $
-                        {Math.round(
-                          quest.reward * aoggprice * props.waxprice * 100
-                        ) / 100}
-                      </GladTableTd>
+                      <GladTableTd>￦{profitinwax}</GladTableTd>
+                      <GladTableTd>${profitinusd}</GladTableTd>
                     </tr>
                   );
                 })}

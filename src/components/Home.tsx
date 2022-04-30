@@ -16,7 +16,7 @@ export function Home() {
   );
 }
 
-const Background = styled.div`
+export const Background = styled.div`
   background: url("/static/Space.png");
   background-size: cover;
   background-attachment: fixed;
@@ -26,7 +26,7 @@ const Background = styled.div`
   z-index: -1;
 `;
 
-const MainTitle = styled.p`
+export const MainTitle = styled.p`
   font-family: "Montserrat", sans-serif;
   text-align: center;
   font-weight: 600;
@@ -53,7 +53,7 @@ const BannerPadding = styled.div`
   padding: 3rem;
 `;
 
-const Wrapper = styled.div`
+export const Wrapper = styled.div`
   display: flex;
   align-content: center;
   flex-wrap: nowrap;

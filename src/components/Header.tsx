@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import logo from "../Logo.png";
 import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
+import { waxpriceContext } from "../Context";
+import { useContext } from "react";
 
-interface Props {
-  setWaxprice: (waxprice: number) => void;
-  waxprice: number;
-}
-
-export function Header(props: Props) {
+export function useWaxprice() {
+  const waxprice = useContext(waxpriceContext);
+  if (waxprice === undefined) throw new Error("WaxpriceContext not provided");
   useEffect(() => {
     (async () => {
       const waxusd = await (
@@ -16,9 +15,14 @@ export function Header(props: Props) {
           "https://api.binance.com/api/v3/ticker/price?symbol=WAXPUSDT"
         )
       ).json();
-      props.setWaxprice(parseFloat(waxusd.price));
+      waxprice.setWaxprice(parseFloat(waxusd.price));
     })();
-  }, []);
+  }, [waxprice]);
+  return waxprice.waxprice;
+}
+
+export function Header() {
+  const waxprice = useWaxprice();
   return (
     <header>
       <Navbar>
@@ -27,9 +31,7 @@ export function Header(props: Props) {
         </LogoNavLink>
         <NavItem>
           <WaxImg src="/static/waxlogo.png" alt="waxlogo" />
-          <PriceParagraph>
-            ${Math.round(100 * props.waxprice) / 100}
-          </PriceParagraph>
+          <PriceParagraph>${Math.round(100 * waxprice) / 100}</PriceParagraph>
         </NavItem>
         <NavLink to="/games">
           <NavParagraph>GAMES</NavParagraph>

@@ -1,7 +1,4 @@
-import React, { useState } from "react";
-import fwlogo from "../header-logo-mobile.png";
-import aoglogo from "../LogoLogo+(1).png";
-import { Outlet, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import styled from "@emotion/styled";
 
 export function Games() {
@@ -11,25 +8,31 @@ export function Games() {
       <MainTitle>CHOOSE YOUR GAME</MainTitle>
       <GamesMenu>
         <GamePadding>
-          <GameLink to="/farmersworld">
+          <GameLink to="/games/farmersworld">
             <GameCard>
               <GameTitle>
                 FARMERS
                 <br />
                 WORLD
               </GameTitle>
-              <GameCardImg src={fwlogo} alt="FarmersWorld logo" />
+              <GameCardImg
+                src="/static/header-logo-mobile.png"
+                alt="FarmersWorld logo"
+              />
             </GameCard>
           </GameLink>
         </GamePadding>
 
         <GamePadding>
-          <GameLink to="/arenaofglory">
+          <GameLink to="/games/arenaofglory">
             <GameCard>
               <GameTitle>
                 ARENA OF <br /> GLORY
               </GameTitle>
-              <GameCardImg src={aoglogo} alt="ArenaOfGlory logo" />
+              <GameCardImg
+                src="/static/LogoLogo+(1).png"
+                alt="ArenaOfGlory logo"
+              />
             </GameCard>
           </GameLink>
         </GamePadding>
